@@ -1,0 +1,80 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Game Setting</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+
+    #usersettingform {
+        background-color: white;
+        opacity: 0.8;
+        padding: 5%;
+        margin-top: 5%;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+    <div class="col-md-12" id="usersettingform">
+        {{if .Error}}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{.flash.error}}
+        </div>
+        {{else if .Notice}}
+        <div class="alert alert-success alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{.flash.notice}}
+        </div>
+        {{end}}
+        <h3 style="text-align: center;">比赛设置</h3>
+        <br>
+        <form action="/admin/gamesetting" method="POST">
+            {{ .xsrfdata }}
+            <div class="form-group">
+                <label for="gamename">比赛名:</label>
+                <input name="gamename" required  placeholder="请输入比赛名" autocomplete="off"
+                    type="text" class="form-control" maxlength="30" value="{{.game.GameName}}">
+            </div>
+            <div class="form-group">
+                <label for="name">域名:</label>
+                <input type="url" name="domainname" placeholder="请输入比赛页面链接" autocomplete="off"
+                    class="form-control" maxlength="100" value="{{.game.GameUrl}}">
+            </div>
+            <div class="form-group">
+                <label for="name">邮件服务器:</label>
+                <input type="url" name="emailserver"  placeholder="请输入邮件服务器" autocomplete="off"
+                    class="form-control" maxlength="100" value="{{.game.EmailHost}}">
+            </div>
+            <div class="form-group">
+                <label for="name">邮件服务器端口:</label>
+                <input type="number" name="emailport"  placeholder="请输入邮件服务器端口" autocomplete="off"
+                    class="form-control" maxlength="100" value="{{.game.EmailPort}}">
+            </div>
+            <div class="form-group">
+                <label for="name">邮件账户名:</label>
+                <input type="text" name="emailaccount" placeholder="请输入邮件账户名" autocomplete="off"
+                    class="form-control" maxlength="100" value="{{.game.EmailAcount}}">
+            </div>
+            <div class="form-group">
+                <label for="name">邮件账户密码:</label>
+                <input type="password" name="emailpass"  placeholder="请输入邮件账户密码" autocomplete="off"
+                    class="form-control" maxlength="100" value="{{.game.EmailPass}}" >
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                  <input type="checkbox" name="ifuseemail" class="form-check-input"  {{if .game.IfUseEmail}} checked="checked" {{end}}>注册时验证邮件
+                </label>
+              </div>
+            <br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary">修改</button>
+                <button type="reset" class="btn btn-dark">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

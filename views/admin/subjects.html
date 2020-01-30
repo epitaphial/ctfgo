@@ -1,0 +1,57 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Subjects</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+    <div class="row" >
+        <div class="col-md-12" style="text-align: center;">
+        <a href="/admin/subjects/add">
+            <button type="button" class="btn btn-outline-primary btn-block"> 添加题目
+            </button>
+        </a>
+        </div>
+    </div>
+    <div class="clearfix" style="margin-bottom: 5%;"></div>
+    {{if .welldone}}
+    <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{.flash.notice}}
+    </div>
+    {{else if .baddone}}
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{.flash.error}}
+    </div>
+    {{end}}
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>题目编号</th>
+                        <th>题目名</th>
+                        <th>类型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Subjects}}
+                    <tr onclick="javascript:window.location.href='/admin/subjects/edit/{{.Id}}'">
+                        <td>{{.Id}}</td>
+                        <td>{{.SubName}}</td>
+                        <td>{{.SubType}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{end}}

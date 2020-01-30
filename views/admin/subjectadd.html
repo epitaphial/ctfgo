@@ -1,0 +1,64 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Add Subject</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+
+    #addform {
+        background-color: white;
+        opacity: 0.8;
+        padding: 5%;
+        margin-top: 5%;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+    <div class="col-md-12" id="addform">
+        {{if .adderror}}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{.flash.error}}
+        </div>
+        {{end}}
+        <h3 style="text-align: center;">添加题目</h3>
+        <form action="/admin/subjects/add" method="POST">
+            {{ .xsrfdata }}
+            <div class="form-group">
+                <label for="subname">题目名称</label>
+                <input type="text" name="subname" required placeholder="请输入" autocomplete="off" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="subtype">题目类型</label>
+                <input type="text" name="subtype" required placeholder="请输入" autocomplete="off" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="subflag">flag</label>
+                <input type="text" name="subflag" required placeholder="请输入" autocomplete="off" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="submark">分值</label>
+                <input type="number" name="submark" required placeholder="请输入" autocomplete="off" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="subdescribe">题目描述(支持MarkDown)</label>
+                <textarea name="subdescribe" placeholder="请输入内容" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="ifhidden">
+                    隐藏题目
+                </label>
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <button type="submit" class="btn btn-primary">添加</button>
+                <button type="reset" class="btn btn-dark">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

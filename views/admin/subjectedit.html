@@ -1,0 +1,131 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Edit Subject</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+
+    #editform {
+        background-color: white;
+        opacity: 0.8;
+        padding: 5%;
+        margin-top: 5%;
+    }
+
+    #fileform {
+        background-color: white;
+        opacity: 0.8;
+        padding: 5%;
+        margin-top: 5%;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>删除 <button type="button" class="close"
+                        data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    您确定要删除吗？
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <a href="/admin/subjects/delete/{{.Subject.Id}}" class="btn btn-danger">删除</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="editform">
+            {{if .EditError}}
+            <div class="alert alert-danger alert-dismissible fade show">
+                {{.flash.error}}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {{end}}
+            <h3 style="text-align: center;">编辑题目</h3>
+            <form action="/admin/subjects/edit/{{.Subject.Id}}" method="POST">
+                {{ .xsrfdata }}
+                <div class="form-group">
+                    <label for="subname">题目名称</label>
+                    <input type="text" name="subname" value="{{.Subject.SubName}}" required placeholder="请输入"
+                        autocomplete="off" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="subtype">题目类型</label>
+                    <input type="text" name="subtype" value="{{.Subject.SubType}}" required placeholder="请输入"
+                        autocomplete="off" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="subflag">flag</label>
+                    <input type="text" name="subflag" value="{{.Subject.SubFlag}}" required placeholder="请输入"
+                        autocomplete="off" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="submark">分值</label>
+                    <input type="number" name="submark" value="{{.Subject.SubMark}}" required placeholder="请输入"
+                        autocomplete="off" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="subdescribe">题目描述(支持MarkDown)</label>
+                    <textarea name="subdescribe" placeholder="请输入内容" rows="5"
+                        class="form-control">{{.Subject.SubDescribe}}</textarea>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="ifhidden" {{if .Subject.IfHidden}} checked="checked" {{end}}>
+                        隐藏题目
+                    </label>
+                </div>
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary">修改</button>
+                    <button type="reset" class="btn btn-dark">重置</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+                        删除
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12" id="fileform">
+            <h3 style="text-align: center;" id="theupload">题目附件上传</h3>
+            <ul class="list-group">
+                {{if .UploadOk}}
+                <div class="alert alert-success alert-dismissible fade show">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  {{.flash.notice}}
+                </div>
+                {{end}}
+                <li href="#" class="list-group-item list-group-item-primary">文件列表</li>
+                {{range .SubFiles}}
+                <a class="list-group-item list-group-item-action" href="/admin/subjects/file/delete/{{.Id}}">{{.FileName}}</a>
+                {{end}}
+            </ul>
+            <hr>
+            <form action="/admin/subjects/file/upload/{{.Subject.Id}}" method="POST" enctype="multipart/form-data">
+                {{ .xsrfdata }}
+                <input id="input-id" type="file" name="files" class="file" multiple>
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{{end}}

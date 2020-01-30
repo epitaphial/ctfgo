@@ -1,0 +1,104 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Game</title>
+<style>
+  body {
+    background: url(/static/img/base.jpg) no-repeat center fixed;
+    background-size: cover;
+  }
+
+  #gamecontainer {
+    padding: 5%;
+  }
+</style>
+<script type="text/javascript">
+  function just_convert(id){
+      var text = document.getElementById("subdescribecontain"+id).innerHTML;
+      var converter = new showdown.Converter();
+      var html = converter.makeHtml(text);
+      document.getElementById("subdescribecontain"+id).innerHTML = html;
+  }
+  </script>
+{{end}}
+
+{{define "body"}}
+<div class="container" id="gamecontainer">
+  {{if .FlagRight}}
+  <div class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{.flash.notice}}
+  </div>
+  {{else if .FlagWrong}}
+  <div class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{.flash.error}}
+  </div>
+  {{end}}
+
+  {{range $type, $iftrue := .SubjectType}}
+  <fieldset style="margin-top: 5%;color: aliceblue;">
+    <legend>{{$type}}</legend>
+  </fieldset>
+
+
+  {{range $.Subjects}}
+  {{if eq $type .SubType}}
+  <button type="button" class="btn {{if .IfDone}}btn-success {{else}} btn-outline-primary {{end}}" data-toggle="modal"
+    data-target="#subj{{.Id}}" onclick="just_convert('{{.Id}}')" >
+    {{.SubName}} - {{.SubMark}}p
+  </button>
+
+
+  <!-- 模态框 -->
+  <div class="modal fade" id="subj{{.Id}}">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">{{.SubName}} - {{.SubMark}}p</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <div id="subdescribecontain{{.Id}}">{{.SubDescribe}}</div>
+          <hr>
+          题目附件:
+          <br>
+          {{with $subid := .Id}}
+          {{range $.allfiles}}
+          {{if eq $subid .SubId}}
+          <a class="btn btn-primary btn-sm" href="/game/file/download/{{.Id}}">{{.FileName}}</a>
+          <br><br>
+          {{end}}
+          {{end}}
+          {{end}}
+          <hr>
+          <form action="/game" method="POST" id="form{{.Id}}">
+            {{ $.xsrfdata }}
+            <div class="form-group">
+              <label for="username">提交flag:</label>
+              <input type="text" name="userflag" required lay-verify="required" placeholder="请输入flag" autocomplete="off"
+                class="form-control">
+            </div>
+            <input type="text" name="subjectid" required lay-verify="required"  value="{{.Id}}"
+              style="visibility: hidden;">
+          </form>
+        </div>
+        <!-- 模态框底部 -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" form="form{{.Id}}">提交flag</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{end}}
+
+  {{end}}
+
+  {{end}}
+
+</div>
+{{end}}

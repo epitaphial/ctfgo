@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<head>
+    {{template "component/head.html" .}}
+    {{template "head" .}}
+    <style>
+        .footer {
+            position: relative;
+            margin-top: 5%;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        html {
+            position: relative;
+            min-height: 100%;
+            margin: 0px;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+        }
+    </style>
+    <style scoped>
+    /*.dropdown:hover>.dropdown-menu{
+        display: block;
+    }
+    .dropdown>.dropdown-toggle:active{
+        pointer-events: none;
+    }*/
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {{if .IsAdminPage}}
+        {{template "component/adminnavbar.html" .}}
+        {{else}}
+        {{template "component/navbar.html" .}}
+        {{end}}
+        {{template "body" .}}
+        {{template "component/footer.html" .}}
+    </div>
+</body>

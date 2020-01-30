@@ -1,0 +1,62 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>User Setting</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+
+    #usersettingform {
+        background-color: white;
+        opacity: 0.8;
+        padding: 5%;
+        margin-top: 5%;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+    <div class="col-md-12" id="usersettingform">
+        {{if .Error}}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{.flash.error}}
+        </div>
+        {{else if .Notice}}
+        <div class="alert alert-success alert-dismissible fade show">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{.flash.notice}}
+        </div>
+        {{end}}
+        <h3 style="text-align: center;">用户设置</h3>
+        <br>
+        <form action="/usersetting" method="POST">
+            {{ .xsrfdata }}
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+                    type="text" class="form-control" maxlength="30" value="{{.username}}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="name">真实姓名:</label>
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入真实姓名" autocomplete="off"
+                    class="form-control" maxlength="30" value="{{.name}}">
+            </div>
+            <div class="form-group">
+                <label for="stuid">学号:</label>
+                <input type="text" name="stuid" required lay-verify="required" placeholder="请输入学号" autocomplete="off"
+                    class="form-control" maxlength="30" value="{{.userid}}">
+            </div>
+            <br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary">修改</button>
+                <a href="/changepwd" class="btn btn-success">修改密码</a>
+                <button type="reset" class="btn btn-dark">重置</button>
+            </div>
+        </form>
+    </div>
+</div>
+{{end}}

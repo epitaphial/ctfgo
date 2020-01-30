@@ -1,0 +1,39 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>CTFGO</title>
+<style>
+  body {
+    background: url(/static/img/base.jpg) no-repeat center fixed;
+    background-size: cover;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+  }
+
+  #indexwrapper {
+    color: beige;
+    padding: 5%;
+    margin-top: 5%;
+  }
+</style>
+{{end}}
+
+{{define "body"}}
+
+<div class="container" id="indexwrapper">
+  <div class="clearfix" style="margin-bottom: 10px;"></div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 500%;font-family: 'Times New Roman', Times, serif;">CTFGO</div>
+    </div>
+  </div>
+  <div class="clearfix" style="margin-bottom: 10px;"></div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 300%;font-family: 'Times New Roman', Times, serif;">A CTF platform written in go</div>
+    </div>
+  </div>
+</div>
+{{end}}

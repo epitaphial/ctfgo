@@ -1,0 +1,43 @@
+<div class="container">
+<nav class="navbar navbar-expand-sm navbar-dark navbar-fixed-top navbar-transparent">
+  <a class="navbar-brand" href="/" style="color:beige;">{{.GameName}}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="/"style="color:beige;">主页</a></li>
+      <li class="nav-item"><a class="nav-link" href="#"style="color:beige;">公告</a></li>
+      {{if .IsLogin}}
+      <li class="nav-item"><a class="nav-link" href="/game"style="color:beige;">比赛</a></li>
+      <li class="nav-item"><a class="nav-link" href="/rank"style="color:beige;">排行榜</a></li>
+      {{end}}
+      {{if .IsLogin}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown" style="color:beige;">
+          {{.UserName}}
+        </a>
+        <div class="dropdown-menu" style="min-width:5%">
+          {{if .IsAdmin}}
+          <a class="dropdown-item" href="/admin">admin</a>
+          {{end}}
+          <a class="dropdown-item" href="/usersetting">设置</a>
+        </div>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="/logout"style="color:beige;">退出</a></li>
+      {{else}}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown"style="color:beige;">
+          未登录
+        </a>
+        <div class="dropdown-menu " style="min-width:5%">
+          <a class="dropdown-item" href="/login">登录</a>
+          <a class="dropdown-item" href="/signup">注册</a>
+        </div>
+      </li>
+
+      {{end}}
+    </ul>
+  </div>
+</nav>
+</div>

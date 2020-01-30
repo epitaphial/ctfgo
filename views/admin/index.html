@@ -1,0 +1,27 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Admin Page</title>
+<style>
+  body {
+    background: url(/static/img/base.jpg) no-repeat center fixed;
+    background-size: cover;
+  }
+
+  #indexwrapper {
+    color: beige;
+    padding: 5%;
+    margin-top: 5%;
+  }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container" id="indexwrapper">
+  <div class="clearfix" style="margin-bottom: 10%;"></div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 300%;font-family: 'Times New Roman', Times, serif;">管理页面</div>
+    </div>
+  </div>
+</div>
+{{end}}

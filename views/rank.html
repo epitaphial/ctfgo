@@ -1,0 +1,37 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Rank</title>
+<style>
+    body {
+        background: url(/static/img/base.jpg) no-repeat center fixed;
+        background-size: cover;
+    }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>用户名</th>
+                        <th>分数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range $index, $elem := .UsersRank}}
+                    <tr onclick="javascript:window.location.href='#'">
+                        <td>{{addone $index}}</td>
+                        <td>{{$elem.Username}}</td>
+                        <td>{{$elem.Mark}}</td>
+                    </tr>
+                     {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,59 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>Login</title>
+<style>
+  body {
+    background: url(/static/img/base.jpg) no-repeat center fixed;
+    background-size: cover;
+  }
+
+  #loginform {
+    background-color: white;
+    opacity: 0.8;
+    padding: 5%;
+    margin-top: 5%;
+  }
+</style>
+{{end}}
+
+{{define "body"}}
+<div class="container">
+  <div class="col-md-12" id="loginform">
+    {{if .Error}}
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{.flash.error}}
+    </div>
+    {{end}}
+    <h3 style="text-align: center;">登录</h3>
+    <br>
+    <form action="/login" method="POST">
+      {{ .xsrfdata }}
+      <div class="form-group">
+        <label for="username">用户名:</label>
+        <input name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" type="text"
+          class="form-control" maxlength="30">
+      </div>
+
+      <div class="form-group">
+        <label for="pwd">密码:</label>
+        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
+          class="form-control" maxlength="30">
+      </div>
+      <div class="form-group">
+        <label for="pwd">验证码:</label>
+        <input type="text" name="captcha" required lay-verify="required" placeholder="请输入验证码" autocomplete="off"
+          class="form-control" maxlength="30">
+          {{create_captcha}}
+      </div>
+      {{.Success}}
+      <br>
+      <div style="text-align: center;">
+        <button type="submit" class="btn btn-primary">登录</button>
+        <a href="/signup" class="btn btn-success">注册</a>
+        <button type="reset" class="btn btn-dark">重置</button>
+      </div>
+    </form>
+  </div>
+</div>
+{{end}}
