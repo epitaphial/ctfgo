@@ -1,0 +1,65 @@
+{{template "component/base.html" .}}
+{{define "head"}}
+<title>User Info</title>
+<style>
+  body {
+    background: url(/static/img/base.jpg) no-repeat center fixed;
+    background-size: cover;
+  }
+
+  #indexwrapper {
+    color: beige;
+    padding: 5%;
+    margin-top: 5%;
+  }
+</style>
+{{end}}
+
+{{define "body"}}
+
+
+<div class="container" id="indexwrapper">
+  <div class="clearfix" style="margin-bottom: 10px;"></div>
+  <div class="clearfix" style="margin-bottom: 10px;"></div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 300%;font-family: 'Times New Roman', Times, serif;">{{.UserInfo.Username}}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 200%;font-family: 'Times New Roman', Times, serif;">邮箱：{{.UserInfo.Email}}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 100%;font-family: 'Times New Roman', Times, serif;">名次：{{.UserInfo.Rank}}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" style="text-align: center;">
+      <div style="font-size: 100%;font-family: 'Times New Roman', Times, serif;">得分：{{.UserInfo.Mark}}</div>
+    </div>
+  </div>
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>编号</th>
+        <th>题目</th>
+        <th>题目分值</th>
+        <th>提交时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range $index, $elem := .UserInfo.SubmitTable}}
+      <tr onclick="javascript:window.location.href='#'">
+        <td>{{addone $index}}</td>
+        <td>{{$elem.SubjectName}}</td>
+        <td>{{$elem.SubjectPoint}}</td>
+        <td>{{$elem.SubmitTime}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}

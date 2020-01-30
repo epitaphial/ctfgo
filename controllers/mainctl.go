@@ -23,6 +23,25 @@ func init() {
 	gamecommon, _ = models.GetGameSetting()
 }
 
+//错误页面的控制器
+type ErrorController struct {
+    beego.Controller
+}
+
+func (c *ErrorController) Error404() {
+	userSess := c.GetSession("user")
+	if userSess != nil {
+		c.Data["IsLogin"] = true
+		c.Data["UserName"] = userSess
+		adminSess := c.GetSession("admin")
+		if adminSess != nil {
+			c.Data["IsAdmin"] = true
+		}
+	}
+    c.Data["content"] = "页面走丢了,找不回来了QAQ"
+    c.TplName = "404.html"
+}
+
 //安装页面的控制器
 type SetupController struct {
 	beego.Controller
@@ -445,5 +464,43 @@ func (c *ChangePwdController) Post() {
 		c.Ctx.Redirect(302, "/changepwd")
 		return
 	}
+}
 
+
+//用户信息页面的控制器
+type UserInfoController struct {
+	beego.Controller
+}
+
+//Prepare method to the controller.
+func (c *UserInfoController) Prepare() {
+	userSess := c.GetSession("user")
+	if userSess == nil {
+		c.Ctx.Redirect(302, "/login")
+	} else {
+		c.Data["IsLogin"] = true
+		c.Data["UserName"] = userSess
+		adminSess := c.GetSession("admin")
+		if adminSess != nil {
+			c.Data["IsAdmin"] = true
+		}
+	}
+	c.Data["GameName"] = gamecommon.GameName
+}
+
+func (c *UserInfoController) Get() {
+	flash := beego.ReadFromRequest(&c.Controller)
+	if _, ok := flash.Data["notice"]; ok {
+		c.Data["Notice"] = true
+	} else if _, ok = flash.Data["error"]; ok {
+		c.Data["Error"] = true
+	}
+	username := c.Ctx.Input.Param(":username")
+	userinfo,state := models.FindUnHiddenUsersByUsername(username)
+	if state == models.WellOp{
+		c.Data["UserInfo"] = userinfo
+	}else{
+		c.Ctx.Abort(404,"404")
+	}
+	c.TplName = "userinfo.html"	
 }

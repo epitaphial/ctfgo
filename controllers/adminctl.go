@@ -21,7 +21,7 @@ type AdminController struct {
 func (c *AdminController) Prepare() {
 	adminSess := c.GetSession("admin")
 	if adminSess == nil {
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	} else {
 		adminSess := c.GetSession("user")
 		c.Data["IsLogin"] = true
@@ -44,7 +44,7 @@ type AdminSubjectsController struct {
 func (c *AdminSubjectsController) Prepare() {
 	adminSess := c.GetSession("admin")
 	if adminSess == nil {
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	} else {
 		adminSess := c.GetSession("admin")
 		c.Data["IsLogin"] = true
@@ -78,7 +78,7 @@ func (c *SubjectsEditController) Prepare() {
 	c.EnableXSRF = true
 	adminSess := c.GetSession("admin")
 	if adminSess == nil {
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	} else {
 		adminSess := c.GetSession("admin")
 		c.Data["IsLogin"] = true
@@ -163,7 +163,7 @@ func (c *SubjectsAddController) Prepare() {
 		c.Data["IsAdminPage"] = true
 	} else {
 		c.Data["IsLogin"] = false
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	}
 }
 
@@ -229,7 +229,7 @@ func (c *SubjectsDeleteController) Prepare() {
 		c.Data["IsAdminPage"] = true
 	} else {
 		c.Data["IsLogin"] = false
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	}
 }
 
@@ -271,7 +271,7 @@ func (c *GameManageController) Prepare() {
 		c.Data["IsAdminPage"] = true
 	} else {
 		c.Data["IsLogin"] = false
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	}
 }
 
@@ -332,7 +332,7 @@ type SubjectsFileUploadController struct {
 func (c *SubjectsFileUploadController) Prepare() {
 	adminSess := c.GetSession("admin")
 	if adminSess == nil {
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	} else {
 		adminSess := c.GetSession("admin")
 		c.Data["IsLogin"] = true
@@ -412,7 +412,7 @@ type SubjectsFileDeleteController struct {
 func (c *SubjectsFileDeleteController) Prepare() {
 	adminSess := c.GetSession("admin")
 	if adminSess == nil {
-		c.Ctx.Redirect(302, "/")
+		c.Ctx.Abort(404,"404")
 	} else {
 		adminSess := c.GetSession("admin")
 		c.Data["IsLogin"] = true

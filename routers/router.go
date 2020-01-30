@@ -18,6 +18,8 @@ var FilterSetup = func(ctx *context.Context) {
 
 func init() {
 
+	//404
+	beego.ErrorController(&controllers.ErrorController{})
 	//routers
 	beego.InsertFilter("/*",beego.BeforeRouter,FilterSetup)
 	//安装页面
@@ -29,6 +31,9 @@ func init() {
 	//个人设置
 	beego.Router("/usersetting", &controllers.UserSettingController{})
 	beego.Router("/changepwd", &controllers.ChangePwdController{})
+
+	//用户信息查看（分数，排名，答题情况）
+	beego.Router("/user/:username", &controllers.UserInfoController{})
 
 	//登录注册相关
 	beego.Router("/login", &controllers.LoginController{})

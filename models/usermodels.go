@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"ctfgo/tools"
 	"time"
-	"fmt"
+	_"fmt"
 )
 
 //用户的数据模型.
@@ -26,6 +26,21 @@ type User struct {
 	UpdatedTime	time.Time	`orm:"auto_now;type(datetime)"`
 }
 
+//用户答题信息，不存储数据库
+type UserSubmitInfo struct{
+	SubjectName	string//题目名
+	SubjectPoint	int//题目分值
+	SubmitTime	time.Time//提交时间
+}
+
+//用户信息，不存储数据库
+type UserInfo struct{
+	Username	string//用户名
+	Email	string//用户邮箱
+	Rank	int//排名
+	Mark	int//得分
+	SubmitTable	[]UserSubmitInfo//答题信息
+}
 
 //注册用户的数据库操作
 func RegisterUser(username, password, email ,activestring string,ifadmin int,ifactive bool)(state State){
@@ -188,7 +203,6 @@ func GetUserInfo(username string)(state State,user User){
 //更新用户信息
 func UpdateUserInfo(user User)(state State){
 	o := orm.NewOrm()
-	fmt.Println(user.Username,user.Stuid,user.Name)
 	var olduser User
 	olduser.Username = user.Username
 	if o.Read(&olduser,"Username") == nil {
@@ -224,4 +238,55 @@ func UpdatePassword(username,oldpassword,password string) (state State){
 			}
 	}
 	return
+}
+
+//通过用户名查找未隐藏用户
+func FindUnHiddenUsersByUsername(username string)(userinfo UserInfo,state State){
+	o := orm.NewOrm()
+	user := User{Username: username,IfHidden:false}
+	err := o.Read(&user,"Username","IfHidden")
+	if err == orm.ErrNoRows {
+		state = NoExistUser
+		return
+	} else if err == orm.ErrMissPK {
+		state = NoSuchKey
+		return
+	} else {
+		userinfo.Username = user.Username
+		userinfo.Email = user.Email
+		userinfo.Mark = user.Mark
+		var users []User
+		state,users = GetUnhiddenUsers()
+		userinfo.Rank = 1
+		for _,eachuser := range users{
+			if eachuser.Username == user.Username{
+				break
+			}else{
+				userinfo.Rank = userinfo.Rank + 1
+			}
+		}
+		var rstable []RightSubmitTable
+		_, err := o.QueryTable("right_submit_table").OrderBy("-CreatedTime").Filter("user_name",userinfo.Username).All(&rstable)
+		if err != nil{
+			state = DatabaseErr
+		}else{
+			userinfo.SubmitTable = make([]UserSubmitInfo,len(rstable))
+			state = WellOp
+			for key,rs :=range rstable{
+				subject := Subject{Id:rs.SubjectId}
+				err := o.Read(&subject)
+				if err == orm.ErrNoRows{
+					state = DatabaseErr
+				} else if err == orm.ErrMissPK{
+					state = NoSuchKey
+				}else{
+					userinfo.SubmitTable[key].SubjectName = subject.SubName
+					userinfo.SubmitTable[key].SubjectPoint = subject.SubMark
+					userinfo.SubmitTable[key].SubmitTime = rs.CreatedTime							
+					state = WellOp
+				}
+			}
+		}
+		return
+	}
 }
